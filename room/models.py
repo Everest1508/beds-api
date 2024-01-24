@@ -1,11 +1,15 @@
 from django.db import models
 
-# Create your models here.
-class Beds(models.Model):
-    bed_id       = models.AutoField(primary_key=True)
-    is_occuipied = models.BooleanField(default=False)
-    patient_name = models.CharField(max_length=200,blank=True,null=True)
+class Patient(models.Model):
+    name = models.CharField(max_length=255)
     medication   = models.CharField(max_length=500,blank=True,null=True)
 
     def __str__(self):
-        return str(self.bed_id)+" : "+('Occupied' if self.is_occuipied else 'Vacant')
+        return self.name
+
+class Bed(models.Model):
+    is_occupied = models.BooleanField(default=False)
+    patient = models.OneToOneField(Patient, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"Bed {self.id} - {'Occupied' if self.is_occupied else 'Vacant'}"

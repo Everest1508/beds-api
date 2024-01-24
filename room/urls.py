@@ -1,8 +1,12 @@
-from django.contrib import admin
+# yourapp/urls.py
+
 from django.urls import path
-from . import views
+from .views import PatientListCreateView, PatientDetailView, BedListCreateView, BedDetailView
 
 urlpatterns = [
-    path('beds/', views.beds),
-    path('get_bed/<int:id>',views.get_bed)
+    path('patients/', PatientListCreateView.as_view(), name='patient-list-create'),
+    path('patients/<int:pk>/', PatientDetailView.as_view(), name='patient-detail'),
+
+    path('beds/', BedListCreateView.as_view(), name='bed-list-create'),
+    path('beds/<int:pk>/', BedDetailView.as_view(), name='bed-detail'),
 ]
