@@ -47,3 +47,18 @@ class BedSerializer(serializers.ModelSerializer):
                 instance.save()
 
         return instance
+    
+    def assign_bed_to_existing_patient(self, bed_id, patient_id):
+        try:
+            bed_instance = Bed.objects.get(pk=bed_id)
+            patient_instance = Patient.objects.get(pk=patient_id)
+
+            bed_instance.patient = patient_instance
+            bed_instance.is_occupied = True
+            bed_instance.save()
+
+            return bed_instance
+        except Bed.DoesNotExist:
+            raise serializers.ValidationError("Bed does not exist.")
+        except Patient.DoesNotExist:
+            raise serializers.ValidationError("Patient does not exist.")

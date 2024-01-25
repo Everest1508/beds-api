@@ -69,3 +69,24 @@ class BedDetailView(APIView):
         bed = get_object_or_404(Bed, pk=pk)
         bed.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AssignBedToPatientView(APIView):
+    def put(self, request, pk, *args, **kwargs):
+        bed_id = pk
+        patient_id = request.data.get('patient', {}).get('id')
+
+        try:
+            bed_instance = Bed.objects.get(pk=bed_id)
+            patient_instance = Patient.objects.get(pk=patient_id)
+
+            # Manually update the bed instance
+            bed_instance.patient = patient_instance
+            bed_instance.is_occupied = True
+            bed_instance.save()
+
+            serializer = BedSerializer(bed_instance)
+            return Response(serializer.data)
+        except Bed.DoesNotExist:
+            return Response({"error": "Bed does not exist."}, status=status.HTTP_404_NOT_FOUND)
+        except Patient.DoesNotExist:
+            return Response({"error": "Patient does not exist."}, status=status.HTTP_404_NOT_FOUND)
