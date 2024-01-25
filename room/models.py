@@ -9,7 +9,7 @@ class Patient(models.Model):
 
 class Bed(models.Model):
     is_occupied = models.BooleanField(default=False)
-    patient = models.OneToOneField(Patient, on_delete=models.SET_NULL, null=True, blank=True)
+    patient = models.ForeignKey(Patient, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"Bed {self.id} - {'Occupied' if self.is_occupied else 'Vacant'}"

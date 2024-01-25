@@ -26,10 +26,16 @@ class BedSerializer(serializers.ModelSerializer):
     
     def update(self, instance, validated_data):
         patient_data = validated_data.pop('patient', None)
+        print(patient_data)
 
         instance = super(BedSerializer, self).update(instance, validated_data)
-
-        if patient_data:
+        
+        if not instance.is_occupied and instance.patient:
+            # instance.patient.delete() #uncomment if want to delete the patient after removing the patient from bed
+            instance.patient = None
+            instance.save()
+            
+        elif patient_data:
             patient_instance = instance.patient
             if patient_instance:
                 for key, value in patient_data.items():
