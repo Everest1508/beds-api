@@ -1,9 +1,9 @@
 ## URL
-```
+
+```http
 https://bedsapi.pythonanywhere.com/
 ```
-
-﻿## Endpoints
+## Endpoints
 
 #### Beds:
 
